@@ -1,5 +1,7 @@
 import React from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import coreVideo from './assets/videos/orcestra-core.mp4'
+import { IntelligenceCoreVideo } from './components/IntelligenceCoreVideo'
 
 const imgGradworld1 = new URL('./assets/figma/8ea1ae519a3a76f7436d84ae889edebdbfe82c01.png', import.meta.url).href;
 const imgLine34 = new URL('./assets/figma/6e1a0149b60c2eae697b257bcf574c9f3aa7bdbf.png', import.meta.url).href;
@@ -838,10 +840,18 @@ export default function OrcestraLanding() {
             </div>
           </div>
           <div className="absolute contents inset-[56.49%_42.62%_41.53%_42.02%]" data-node-id="13263:2757" data-name="Mask group">
-            <div className="absolute aspect-[2560/1440] left-[32.92%] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[152.92px_29.901px] mask-size-[258px_258px] right-[33.49%] top-[7309.05px]" data-node-id="13263:2759" style={{ maskImage: `url('${imgGlassGlowingMagicBallEnergyInside1}')` }} data-name="glass-glowing-magic-ball-energy-inside 1">
-              <video autoPlay className="absolute max-w-none object-cover size-full" controlsList="nodownload" loop playsInline>
-                <source src="/_videos/v1/4bb3f74e73c2cd0a5ccd0a24c3fcd51c8bf01d20" />
-              </video>
+            <div
+              className="absolute left-1/2 top-[7309.05px] -translate-x-1/2"
+              data-node-id="13263:2759"
+              data-name="glass-glowing-magic-ball-energy-inside 1"
+            >
+              <IntelligenceCoreVideo
+                src={coreVideo}
+                size={258}
+                glow
+                maskSrc={imgGlassGlowingMagicBallEnergyInside1}
+                posterSrc={imgGlassGlowingMagicBallEnergyInside1}
+              />
             </div>
           </div>
           <div className="-translate-x-1/2 absolute h-[27.151px] left-[calc(50%-5.02px)] top-[7454.85px] w-[155.416px]" data-node-id="13268:2813" data-name="Layer_1">
