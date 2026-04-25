@@ -53,6 +53,9 @@ const ARTBOARD_H = 12992;
 
 export default function OrcestraLanding() {
   const [scale, setScale] = React.useState(1);
+  const [isPlatform02Open, setIsPlatform02Open] = React.useState(false);
+  const [isPlatform03Open, setIsPlatform03Open] = React.useState(false);
+  const [isPlatform04Open, setIsPlatform04Open] = React.useState(false);
 
   React.useEffect(() => {
     const update = () => {
@@ -68,8 +71,351 @@ export default function OrcestraLanding() {
     return () => window.removeEventListener('resize', update);
   }, []);
 
+  React.useEffect(() => {
+    if (!isPlatform02Open && !isPlatform03Open && !isPlatform04Open) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsPlatform02Open(false);
+        setIsPlatform03Open(false);
+        setIsPlatform04Open(false);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isPlatform02Open, isPlatform03Open, isPlatform04Open]);
+
   return (
     <div className="bg-black min-h-screen w-full overflow-x-hidden">
+      {isPlatform02Open ? (
+        <div
+          className="fixed inset-0 z-50"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Risk & Compliance Orchestration"
+        >
+          <button
+            type="button"
+            aria-label="Close"
+            className="absolute inset-0 bg-black/60"
+            onClick={() => setIsPlatform02Open(false)}
+          />
+          <div className="absolute inset-0 grid place-items-center p-4">
+            <div
+              style={{
+                width: 1399 * scale,
+                height: 553 * scale,
+              }}
+              className="overflow-hidden rounded-[16px] shadow-[0px_20px_80px_rgba(0,0,0,0.6)]"
+            >
+              <div
+                style={{
+                  width: 1399,
+                  height: 553,
+                  transform: `scale(${scale})`,
+                  transformOrigin: 'top left',
+                }}
+                className="relative bg-[#000c0f] border border-[rgba(255,255,255,0.1)]"
+                data-node-id="13277:2976"
+                data-name="Platform02"
+              >
+                <div className="absolute h-[425.429px] left-[452.65px] top-[-114.21px] w-[1210.52px]" data-node-id="13277:2977" data-name="Plan Graphics">
+                  <div className="absolute inset-[-144.93%_-50.93%]">
+                    <img alt="" className="block max-w-none size-full" src={imgPlanGraphics} />
+                  </div>
+                </div>
+                <p className="absolute font-['Aeonik:Medium',sans-serif] leading-[1.2] left-[23px] not-italic text-[#eaedfa] text-[24px] top-[34px] whitespace-pre" data-node-id="13277:2980">{`02  ➔  Risk & Compliance Orchestration`}</p>
+                <p className="-translate-x-full absolute font-['Aeonik:Regular',sans-serif] leading-[1.2] left-[1299px] not-italic text-[#eaedfa] text-[18px] text-right top-[37.5px] tracking-[1.08px] uppercase whitespace-nowrap" data-node-id="13277:2981">
+                  Transaction Intelligence Layer
+                </p>
+                <p className="absolute font-['Inter:Regular',sans-serif] font-normal leading-[1.49] left-[25px] not-italic text-[#b7b7b7] text-[19px] top-[77px] w-[701px]" data-node-id="13277:2986">
+                  Orcestra evaluates every transaction in real time using layered behavioral, device, and financial risk signals.
+                </p>
+                <p className="absolute font-['Aeonik:Bold',sans-serif] leading-none left-[23px] not-italic text-[#c8c8c8] text-[20px] top-[176px] tracking-[1.6px] uppercase w-[204px]" data-node-id="13277:2984">
+                  Capabilities
+                </p>
+                <p className="absolute font-['Aeonik:Bold',sans-serif] leading-none left-[464px] not-italic text-[#c8c8c8] text-[20px] top-[176px] tracking-[1.6px] uppercase w-[204px]" data-node-id="13277:2987">
+                  Outcomes
+                </p>
+
+                <div className="absolute flex h-[255px] items-center justify-center left-[25px] top-[217px] w-0" style={{ "--transform-inner-width": "0", "--transform-inner-height": "0" } as React.CSSProperties}>
+                  <div className="flex-none rotate-90">
+                    <div className="h-0 relative w-[255px]" data-node-id="13277:2985">
+                      <div className="absolute inset-[-1px_0_0_0]">
+                        <img alt="" className="block max-w-none size-full" src={imgLine29} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute flex h-[223px] items-center justify-center left-[466px] top-[217px] w-0" style={{ "--transform-inner-width": "0", "--transform-inner-height": "0" } as React.CSSProperties}>
+                  <div className="flex-none rotate-90">
+                    <div className="h-0 relative w-[223px]" data-node-id="13277:2988">
+                      <div className="absolute inset-[-1px_0_0_0]">
+                        <img alt="" className="block max-w-none size-full" src={imgLine30} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <ul className="absolute block font-['Inter:Regular',sans-serif] font-normal leading-[0] left-[37px] list-disc not-italic text-[#c8c8c8] text-[18px] top-[216px] w-[382px]" data-node-id="13277:2982">
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">{`Device fingerprinting & identity linking`}</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">{`IP reputation & geolocation validation`}</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">{`Velocity & behavioral pattern detection`}</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">{`BIN intelligence & card metadata analysis`}</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Friendly fraud modeling</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">AI powered risk scoring</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Adaptive rule engine</span></li>
+                  <li className="ms-[27px]"><span className="leading-[1.78]">Dynamic risk based routing</span></li>
+                </ul>
+                <ul className="absolute block font-['Inter:Regular',sans-serif] font-normal leading-[0] left-[475px] list-disc not-italic text-[#c8c8c8] text-[18px] top-[216px] w-[410px]" data-node-id="13277:2983">
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">{`Reduced fraud & chargeback ratios`}</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Higher approval rates with smarter risk segmentation</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Dynamic routing away from risk concentration</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Fewer false positives</span></li>
+                  <li className="ms-[27px]"><span className="leading-[1.78]">Portfolio level fraud containment</span></li>
+                </ul>
+
+                <button
+                  type="button"
+                  className="absolute bg-[rgba(255,255,255,0.13)] left-[1326px] overflow-clip rounded-[71px] size-[48px] top-[24px]"
+                  aria-label="Close"
+                  onClick={() => setIsPlatform02Open(false)}
+                  data-node-id="13277:2992"
+                  data-name="Icon"
+                >
+                  <span className="sr-only">Close</span>
+                  <div className="absolute left-[12px] size-[24px] top-[12px]" data-node-id="13277:2993" data-name="FAQ Icon">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFaqIcon1} />
+                  </div>
+                </button>
+
+                <div className="absolute inset-[calc(28.03%-0.44px)_calc(5.15%-0.9px)_calc(-4.88%-1.1px)_calc(70.34%+0.41px)]" data-node-id="13281:145" data-name="Icon">
+                  <div className="absolute inset-[-0.24%_-0.29%]">
+                    <img alt="" className="block max-w-none size-full" src={imgIcon} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+      {isPlatform03Open ? (
+        <div
+          className="fixed inset-0 z-50"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Payment & Vaulting Orchestration"
+        >
+          <button
+            type="button"
+            aria-label="Close"
+            className="absolute inset-0 bg-black/60"
+            onClick={() => setIsPlatform03Open(false)}
+          />
+          <div className="absolute inset-0 grid place-items-center p-4">
+            <div
+              style={{
+                width: 1399 * scale,
+                height: 553 * scale,
+              }}
+              className="overflow-hidden rounded-[16px] shadow-[0px_20px_80px_rgba(0,0,0,0.6)]"
+            >
+              <div
+                style={{
+                  width: 1399,
+                  height: 553,
+                  transform: `scale(${scale})`,
+                  transformOrigin: 'top left',
+                }}
+                className="relative bg-[#000c0f] border border-[rgba(255,255,255,0.1)]"
+                data-node-id="13281:102"
+                data-name="Platform03"
+              >
+                <div className="absolute h-[425.429px] left-[452.65px] top-[-114.21px] w-[1210.52px]" data-node-id="13281:103" data-name="Plan Graphics">
+                  <div className="absolute inset-[-144.93%_-50.93%]">
+                    <img alt="" className="block max-w-none size-full" src={imgPlanGraphics} />
+                  </div>
+                </div>
+                <p className="absolute font-['Aeonik:Medium',sans-serif] leading-[1.2] left-[23px] not-italic text-[#eaedfa] text-[24px] top-[34px] whitespace-pre" data-node-id="13281:106">{`03  ➔  Payment & Vaulting Orchestration`}</p>
+                <p className="-translate-x-full absolute font-['Aeonik:Regular',sans-serif] leading-[1.2] left-[1299px] not-italic text-[#eaedfa] text-[18px] text-right top-[37.5px] tracking-[1.08px] uppercase whitespace-nowrap" data-node-id="13281:107">{`Compliance & Partner Optimization Layer`}</p>
+                <p className="absolute font-['Inter:Regular',sans-serif] font-normal leading-[1.49] left-[25px] not-italic text-[#b7b7b7] text-[19px] top-[77px] w-[701px]" data-node-id="13281:112">
+                  Orcestra intelligently routes transactions across multiple processors and acquirers to maximize authorization rates and partner alignment.
+                </p>
+                <p className="absolute font-['Aeonik:Bold',sans-serif] leading-none left-[23px] not-italic text-[#c8c8c8] text-[20px] top-[176px] tracking-[1.6px] uppercase w-[204px]" data-node-id="13281:110">
+                  Capabilities
+                </p>
+                <p className="absolute font-['Aeonik:Bold',sans-serif] leading-none left-[464px] not-italic text-[#c8c8c8] text-[20px] top-[176px] tracking-[1.6px] uppercase w-[204px]" data-node-id="13281:113">
+                  Outcomes
+                </p>
+
+                <div className="absolute flex h-[287px] items-center justify-center left-[25px] top-[217px] w-0" style={{ "--transform-inner-width": "0", "--transform-inner-height": "0" } as React.CSSProperties}>
+                  <div className="flex-none rotate-90">
+                    <div className="h-0 relative w-[287px]" data-node-id="13281:111">
+                      <div className="absolute inset-[-1px_0_0_0]">
+                        <img alt="" className="block max-w-none size-full" src={imgLine29} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute flex h-[223px] items-center justify-center left-[466px] top-[217px] w-0" style={{ "--transform-inner-width": "0", "--transform-inner-height": "0" } as React.CSSProperties}>
+                  <div className="flex-none rotate-90">
+                    <div className="h-0 relative w-[223px]" data-node-id="13281:114">
+                      <div className="absolute inset-[-1px_0_0_0]">
+                        <img alt="" className="block max-w-none size-full" src={imgLine30} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <ul className="absolute block font-['Inter:Regular',sans-serif] font-normal leading-[0] left-[37px] list-disc not-italic text-[#c8c8c8] text-[18px] top-[216px] w-[416px]" data-node-id="13281:108">
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Multi PSP integration</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Smart cascading authorization</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Intelligent retry sequencing</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Decline recovery optimization</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Cross border routing</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">{`Product & risk alignment with PSPs`}</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">{`Token vault & lifecycle management`}</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">{`Subscription & recurring billing logic`}</span></li>
+                  <li className="ms-[27px]"><span className="leading-[1.78]">Alternative payment method orchestration</span></li>
+                </ul>
+                <ul className="absolute block font-['Inter:Regular',sans-serif] font-normal leading-[0] left-[475px] list-disc not-italic text-[#c8c8c8] text-[18px] top-[216px] w-[386px]" data-node-id="13281:109">
+                  <li className="mb-0 ms-[27px] whitespace-pre-wrap">
+                    <span className="leading-[1.78]">
+                      {`5 to 15% approval rate lift `}
+                      <br aria-hidden="true" />
+                      (critical revenue delta)
+                    </span>
+                  </li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Decline recovery automation</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Improved cross border performance</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Reduced dependency on single acquirer</span></li>
+                  <li className="ms-[27px]"><span className="leading-[1.78]">Real time visibility into processor performance</span></li>
+                </ul>
+
+                <button
+                  type="button"
+                  className="absolute bg-[rgba(255,255,255,0.13)] left-[1326px] overflow-clip rounded-[71px] size-[48px] top-[25px]"
+                  aria-label="Close"
+                  onClick={() => setIsPlatform03Open(false)}
+                  data-node-id="13281:118"
+                  data-name="Icon"
+                >
+                  <span className="sr-only">Close</span>
+                  <div className="absolute left-[12px] size-[24px] top-[12px]" data-node-id="13281:119" data-name="FAQ Icon">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFaqIcon1} />
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+      {isPlatform04Open ? (
+        <div
+          className="fixed inset-0 z-50"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Dispute & Fraud Orchestration"
+        >
+          <button
+            type="button"
+            aria-label="Close"
+            className="absolute inset-0 bg-black/60"
+            onClick={() => setIsPlatform04Open(false)}
+          />
+          <div className="absolute inset-0 grid place-items-center p-4">
+            <div
+              style={{
+                width: 1399 * scale,
+                height: 553 * scale,
+              }}
+              className="overflow-hidden rounded-[16px] shadow-[0px_20px_80px_rgba(0,0,0,0.6)]"
+            >
+              <div
+                style={{
+                  width: 1399,
+                  height: 553,
+                  transform: `scale(${scale})`,
+                  transformOrigin: 'top left',
+                }}
+                className="relative bg-[#000c0f] border border-[rgba(255,255,255,0.1)]"
+                data-node-id="13281:122"
+                data-name="Platform04"
+              >
+                <div className="absolute h-[425.429px] left-[452.65px] top-[-114.21px] w-[1210.52px]" data-node-id="13281:123" data-name="Plan Graphics">
+                  <div className="absolute inset-[-144.93%_-50.93%]">
+                    <img alt="" className="block max-w-none size-full" src={imgPlanGraphics} />
+                  </div>
+                </div>
+                <p className="absolute font-['Aeonik:Medium',sans-serif] leading-[1.2] left-[23px] not-italic text-[#eaedfa] text-[24px] top-[34px] whitespace-pre" data-node-id="13281:126">{`04  ➔  Dispute & Fraud Orchestration`}</p>
+                <p className="-translate-x-full absolute font-['Aeonik:Regular',sans-serif] leading-[1.2] left-[1299px] not-italic text-[#eaedfa] text-[18px] text-right top-[37.5px] tracking-[1.08px] uppercase whitespace-nowrap" data-node-id="13281:127">
+                  Compliance Defense Layer
+                </p>
+                <p className="absolute font-['Inter:Regular',sans-serif] font-normal leading-[1.49] left-[25px] not-italic text-[#b7b7b7] text-[19px] top-[77px] w-[558px]" data-node-id="13281:132">
+                  Orcestra automates the entire dispute lifecycle from ingestion and mitigation to representment and recovery.
+                </p>
+                <p className="absolute font-['Aeonik:Bold',sans-serif] leading-none left-[23px] not-italic text-[#c8c8c8] text-[20px] top-[176px] tracking-[1.6px] uppercase w-[204px]" data-node-id="13281:130">
+                  Capabilities
+                </p>
+                <p className="absolute font-['Aeonik:Bold',sans-serif] leading-none left-[464px] not-italic text-[#c8c8c8] text-[20px] top-[176px] tracking-[1.6px] uppercase w-[204px]" data-node-id="13281:133">
+                  Outcomes
+                </p>
+
+                <div className="absolute flex h-[255px] items-center justify-center left-[25px] top-[217px] w-0" style={{ "--transform-inner-width": "0", "--transform-inner-height": "0" } as React.CSSProperties}>
+                  <div className="flex-none rotate-90">
+                    <div className="h-0 relative w-[255px]" data-node-id="13281:131">
+                      <div className="absolute inset-[-1px_0_0_0]">
+                        <img alt="" className="block max-w-none size-full" src={imgLine29} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute flex h-[191px] items-center justify-center left-[466px] top-[217px] w-0" style={{ "--transform-inner-width": "0", "--transform-inner-height": "0" } as React.CSSProperties}>
+                  <div className="flex-none rotate-90">
+                    <div className="h-0 relative w-[191px]" data-node-id="13281:134">
+                      <div className="absolute inset-[-1px_0_0_0]">
+                        <img alt="" className="block max-w-none size-full" src={imgLine30} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <ul className="absolute block font-['Inter:Regular',sans-serif] font-normal leading-[0] left-[37px] list-disc not-italic text-[#c8c8c8] text-[18px] top-[216px] w-[416px]" data-node-id="13281:128">
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Verifi RDR automation</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Ethoca alert ingestion</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Early warning monitoring</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">CE 3.0 compelling evidence assembly</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Representment automation</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Refund automation rules</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">{`Dispute & VAMP analytics dashboard`}</span></li>
+                  <li className="ms-[27px]"><span className="leading-[1.78]">Threshold breach monitoring</span></li>
+                </ul>
+                <ul className="absolute block font-['Inter:Regular',sans-serif] font-normal leading-[0] left-[475px] list-disc not-italic text-[#c8c8c8] text-[18px] top-[216px] w-[446px]" data-node-id="13281:129">
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Lower chargeback ratios</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Higher win rates on representment</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Reduced network monitoring program risk</span></li>
+                  <li className="mb-0 ms-[27px]"><span className="leading-[1.78]">Early intervention before thresholds are breached</span></li>
+                  <li className="ms-[27px]"><span className="leading-[1.78]">{`Full visibility across all MIDs & processors`}</span></li>
+                </ul>
+
+                <button
+                  type="button"
+                  className="absolute bg-[rgba(255,255,255,0.13)] left-[1326px] overflow-clip rounded-[71px] size-[48px] top-[25px]"
+                  aria-label="Close"
+                  onClick={() => setIsPlatform04Open(false)}
+                  data-node-id="13281:138"
+                  data-name="Icon"
+                >
+                  <span className="sr-only">Close</span>
+                  <div className="absolute left-[12px] size-[24px] top-[12px]" data-node-id="13281:139" data-name="FAQ Icon">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFaqIcon1} />
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
       <div
         className="mx-auto overflow-hidden"
         style={{
@@ -248,7 +594,14 @@ export default function OrcestraLanding() {
           </div>
         </div>
         <div className="absolute contents left-[141px] top-[6282px]" data-node-id="13277:2971">
-          <div className="absolute bg-[var(--color-2,#000c0f)] border border-[rgba(255,255,255,0.1)] border-solid h-[96px] left-[141px] overflow-clip rounded-[16px] top-[6282px] w-[1399px]" data-node-id="13246:1626" data-name="FAQ Text To Voice">
+          <button
+            type="button"
+            aria-label="Open Risk & Compliance Orchestration"
+            className="absolute bg-[var(--color-2,#000c0f)] border border-[rgba(255,255,255,0.1)] border-solid h-[96px] left-[141px] overflow-clip rounded-[16px] top-[6282px] w-[1399px] text-left"
+            data-node-id="13246:1626"
+            data-name="FAQ Text To Voice"
+            onClick={() => setIsPlatform02Open(true)}
+          >
             <div className="absolute font-['Aeonik:Regular',sans-serif] h-[29px] left-[23px] not-italic top-[32.5px] w-[1351px]" data-node-id="13246:1627" data-name="Text">
               <p className="absolute leading-[0] left-0 text-[#9997a0] text-[24px] top-0 whitespace-pre" data-node-id="13246:1628">
                 <span className="leading-[1.2]">0</span>
@@ -260,7 +613,7 @@ export default function OrcestraLanding() {
                 Transaction Intelligence Layer
               </p>
             </div>
-          </div>
+          </button>
           <div className="absolute left-[calc(91.67%-72px)] size-[48px] top-[6306px]" data-node-id="13246:1634" data-name="FAQ Icon">
             <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFaqIcon} />
           </div>
@@ -269,7 +622,14 @@ export default function OrcestraLanding() {
           <div className="absolute left-[calc(91.67%-72px)] size-[48px] top-[6418px]" data-node-id="13246:1636" data-name="FAQ Icon">
             <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFaqIcon} />
           </div>
-          <div className="absolute bg-[var(--color-2,#000c0f)] border border-[rgba(255,255,255,0.1)] border-solid h-[96px] left-[141px] overflow-clip rounded-[16px] top-[6394px] w-[1399px]" data-node-id="13246:1638" data-name="FAQ Text To Voice">
+          <button
+            type="button"
+            aria-label="Open Payment & Vaulting Orchestration"
+            className="absolute bg-[var(--color-2,#000c0f)] border border-[rgba(255,255,255,0.1)] border-solid h-[96px] left-[141px] overflow-clip rounded-[16px] top-[6394px] w-[1399px] text-left"
+            data-node-id="13246:1638"
+            data-name="FAQ Text To Voice"
+            onClick={() => setIsPlatform03Open(true)}
+          >
             <div className="absolute font-['Aeonik:Regular',sans-serif] h-[29px] left-[23px] not-italic top-[32.5px] w-[1351px]" data-node-id="13246:1639" data-name="Text">
               <p className="absolute leading-[0] left-0 text-[#9997a0] text-[24px] top-0 whitespace-pre" data-node-id="13246:1640">
                 <span className="leading-[1.2]">0</span>
@@ -279,13 +639,20 @@ export default function OrcestraLanding() {
               </p>
               <p className="absolute leading-[1.2] right-[77px] text-[#3c86a0] text-[18px] text-right top-[3.5px] tracking-[1.08px] uppercase whitespace-nowrap" data-node-id="13246:1642">{`Compliance & Partner Optimization Layer`}</p>
             </div>
-          </div>
+          </button>
           <div className="absolute left-[calc(91.67%-72px)] size-[48px] top-[6418px]" data-node-id="13246:1662" data-name="FAQ Icon">
             <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFaqIcon} />
           </div>
         </div>
         <div className="absolute contents left-[141px] top-[6506px]" data-node-id="13277:2973">
-          <div className="absolute bg-[rgba(0,12,15,0.2)] border border-[rgba(255,255,255,0.1)] border-solid h-[96px] left-[141px] overflow-clip rounded-[16px] top-[6506px] w-[1399px]" data-node-id="13246:1646" data-name="FAQ Text To Voice">
+          <button
+            type="button"
+            aria-label="Open Dispute & Fraud Orchestration"
+            className="absolute bg-[rgba(0,12,15,0.2)] border border-[rgba(255,255,255,0.1)] border-solid h-[96px] left-[141px] overflow-clip rounded-[16px] top-[6506px] w-[1399px] text-left"
+            data-node-id="13246:1646"
+            data-name="FAQ Text To Voice"
+            onClick={() => setIsPlatform04Open(true)}
+          >
             <div className="absolute font-['Aeonik:Regular',sans-serif] h-[29px] left-[23px] not-italic top-[32.5px] w-[1351px]" data-node-id="13246:1647" data-name="Text">
               <p className="absolute leading-[0] left-0 text-[#9997a0] text-[24px] top-0 whitespace-pre" data-node-id="13246:1648">
                 <span className="leading-[1.2]">0</span>
@@ -297,7 +664,7 @@ export default function OrcestraLanding() {
                 Compliance Defense Layer
               </p>
             </div>
-          </div>
+          </button>
           <div className="absolute left-[calc(91.67%-72px)] size-[48px] top-[6530px]" data-node-id="13246:1664" data-name="FAQ Icon">
             <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFaqIcon} />
           </div>
