@@ -5,6 +5,8 @@ import { IntelligenceCoreVideo } from './components/IntelligenceCoreVideo'
 
 const imgGradworld1 = new URL('./assets/figma/8ea1ae519a3a76f7436d84ae889edebdbfe82c01.png', import.meta.url).href;
 const imgLine34 = new URL('./assets/figma/6e1a0149b60c2eae697b257bcf574c9f3aa7bdbf.png', import.meta.url).href;
+const imgFaqIcon = new URL('./assets/figma/562000d92afdb1ea072ecd704f4a05e57f11f8d4.svg', import.meta.url).href;
+const imgFaqIconActive = new URL('./assets/figma/3f7be87b1ea1b30c3b59f9dfab5fc9e79be6c251.svg', import.meta.url).href;
 const imgSunset1 = new URL('./assets/figma/09970d85eeff340e1424b29e8c3fcba540843cbd.png', import.meta.url).href;
 const imgSun1 = new URL('./assets/figma/6a2b0408ef32c3bfa23b90a220df1bb88d723032.png', import.meta.url).href;
 const img01MerchantIntelligence1 = new URL('./assets/figma/4364a79f5a3cd52d3cb329654472eb5a0913e33d.png', import.meta.url).href;
@@ -51,6 +53,288 @@ const imgLine43 = new URL('./assets/figma/b24104c17712ace1be8fd07d072beb87ed4d88
 
 const ARTBOARD_W = 1681;
 const ARTBOARD_H = 12992;
+
+type ComplianceBadge = {
+  label: string
+  bg: string
+  fg: string
+  width: number
+  uppercase?: boolean
+}
+
+type ComplianceCardData = {
+  key: string
+  width: number
+  height: number
+  title: string
+  description: string
+  badge: ComplianceBadge
+  iconSrc: string
+  iconInset: string
+  iconInnerInset?: string
+  extra?: React.ReactNode
+}
+
+function ComplianceCardsRow(props: { left: number; top: number }) {
+  const scrollerRef = React.useRef<HTMLDivElement | null>(null)
+  const cardRefs = React.useRef<Array<HTMLDivElement | null>>([])
+  const [activeIdx, setActiveIdx] = React.useState(0)
+  const [visible, setVisible] = React.useState<Record<string, boolean>>({})
+
+  const cards = React.useMemo<ComplianceCardData[]>(
+    () => [
+      {
+        key: 'pci',
+        width: 329,
+        height: 345,
+        title: 'PCI DSS Level 1',
+        description: 'Compliant architecture across all transaction handling and data storage systems.',
+        badge: { label: 'ACTIVE', bg: 'rgba(178,252,227,0.2)', fg: '#30ffb9', width: 72, uppercase: true },
+        iconSrc: imgIcon4,
+        iconInset: 'calc(29.86% - 0.4px) calc(68.79% + 0.38px) 49.96% calc(8.92% - 0.82px)',
+        iconInnerInset: '-1.44% -1.36%',
+      },
+      {
+        key: 'aml',
+        width: 327,
+        height: 345,
+        title: 'Integrated AML + KYC/KYB',
+        description: 'Multi provider orchestration for sanctions, identity, and ownership verification.',
+        badge: { label: 'ACTIVE', bg: 'rgba(178,252,227,0.2)', fg: '#30ffb9', width: 72, uppercase: true },
+        iconSrc: imgIcon5,
+        iconInset: 'calc(30.72% - 0.39px) calc(66.97% + 0.34px) calc(51.01% + 0.02px) calc(8.87% - 0.82px)',
+        iconInnerInset: '-1.59% -1.27%',
+      },
+      {
+        key: 'onboarding',
+        width: 329,
+        height: 345,
+        title: 'Merchant & Agent Onboarding',
+        description: 'Under automated audit trail for full lifecycle compliance documentation.',
+        badge: { label: 'ACTIVE', bg: 'rgba(178,252,227,0.2)', fg: '#30ffb9', width: 72, uppercase: true },
+        iconSrc: imgIcon6,
+        iconInset: 'calc(29.57% - 0.41px) calc(67.48% + 0.35px) 49.86% calc(9.42% - 0.81px)',
+        iconInnerInset: '-1.41% -1.32%',
+      },
+      {
+        key: 'soc2',
+        width: 327,
+        height: 345,
+        title: 'SOC 2 Type II',
+        description: 'Certification in progress for enterprise grade security and operational controls.',
+        badge: { label: 'IN PROGRESS', bg: 'rgba(37,137,170,0.2)', fg: '#46c7ff', width: 118, uppercase: true },
+        iconSrc: imgIcon7,
+        iconInset: '28.99% 68.2% 49.86% 9.48%',
+        iconInnerInset: '-1.37% -1.37%',
+        extra: (
+          <p className="complianceCardNumber" aria-hidden="true">
+            2
+          </p>
+        ),
+      },
+      {
+        key: 'iso',
+        width: 327,
+        height: 345,
+        title: 'ISO 27001',
+        description: 'Targeted for Q3 2026 to meet international information security management standards.',
+        badge: { label: 'ROADMAP', bg: 'rgba(182,185,184,0.2)', fg: '#ffffff', width: 82, uppercase: true },
+        iconSrc: imgIcon8,
+        iconInset: 'calc(29.86% - 0.4px) calc(68.81% + 0.38px) calc(51.88% + 0.04px) calc(9.48% - 0.81px)',
+        iconInnerInset: '-1.59% -1.41%',
+      },
+    ],
+    [],
+  )
+
+  React.useEffect(() => {
+    const el = scrollerRef.current
+    if (!el) return
+
+    let raf = 0
+    const updateActive = () => {
+      raf = 0
+      const scroller = scrollerRef.current
+      if (!scroller) return
+      const center = scroller.scrollLeft + scroller.clientWidth / 2
+      let bestIdx = 0
+      let bestDist = Number.POSITIVE_INFINITY
+      for (let i = 0; i < cards.length; i++) {
+        const cardEl = cardRefs.current[i]
+        if (!cardEl) continue
+        const cardCenter = cardEl.offsetLeft + cardEl.clientWidth / 2
+        const d = Math.abs(cardCenter - center)
+        if (d < bestDist) {
+          bestDist = d
+          bestIdx = i
+        }
+      }
+      setActiveIdx(bestIdx)
+    }
+
+    const onScroll = () => {
+      if (raf) return
+      raf = window.requestAnimationFrame(updateActive)
+    }
+
+    el.addEventListener('scroll', onScroll, { passive: true })
+    updateActive()
+    return () => {
+      el.removeEventListener('scroll', onScroll)
+      if (raf) window.cancelAnimationFrame(raf)
+    }
+  }, [cards.length])
+
+  React.useEffect(() => {
+    const scroller = scrollerRef.current
+    if (!scroller) return
+
+    const cardsEls = cardRefs.current.filter(Boolean) as HTMLDivElement[]
+    const io = new IntersectionObserver(
+      (entries) => {
+        setVisible((prev) => {
+          let changed = false
+          const next = { ...prev }
+          for (const e of entries) {
+            const key = (e.target as HTMLElement).dataset.cardKey
+            if (!key) continue
+            const v = e.isIntersecting
+            if (next[key] !== v) {
+              next[key] = v
+              changed = true
+            }
+          }
+          return changed ? next : prev
+        })
+      },
+      { root: scroller, threshold: 0.35 },
+    )
+
+    for (const c of cardsEls) io.observe(c)
+    return () => io.disconnect()
+  }, [])
+
+  React.useEffect(() => {
+    const el = scrollerRef.current
+    if (!el) return
+
+    let isPointerDown = false
+    let startX = 0
+    let startScrollLeft = 0
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      isPointerDown = true
+      startX = e.clientX
+      startScrollLeft = el.scrollLeft
+      el.setPointerCapture(e.pointerId)
+      el.classList.add('isDragging')
+    }
+
+    const onPointerMove = (e: PointerEvent) => {
+      if (!isPointerDown) return
+      const dx = e.clientX - startX
+      el.scrollLeft = startScrollLeft - dx
+    }
+
+    const onPointerUp = (e: PointerEvent) => {
+      if (!isPointerDown) return
+      isPointerDown = false
+      try {
+        el.releasePointerCapture(e.pointerId)
+      } catch {
+        // ignore
+      }
+      el.classList.remove('isDragging')
+    }
+
+    const onWheel = (e: WheelEvent) => {
+      // only redirect wheel while user is over the row
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return
+      const maxScroll = el.scrollWidth - el.clientWidth
+      if (maxScroll <= 0) return
+      const atStart = el.scrollLeft <= 0
+      const atEnd = el.scrollLeft >= maxScroll - 1
+      const goingLeft = e.deltaY < 0
+      const goingRight = e.deltaY > 0
+      if ((atStart && goingLeft) || (atEnd && goingRight)) return
+      e.preventDefault()
+      el.scrollLeft += e.deltaY
+    }
+
+    el.addEventListener('pointerdown', onPointerDown)
+    el.addEventListener('pointermove', onPointerMove)
+    el.addEventListener('pointerup', onPointerUp)
+    el.addEventListener('pointercancel', onPointerUp)
+    el.addEventListener('wheel', onWheel, { passive: false })
+
+    return () => {
+      el.removeEventListener('pointerdown', onPointerDown)
+      el.removeEventListener('pointermove', onPointerMove)
+      el.removeEventListener('pointerup', onPointerUp)
+      el.removeEventListener('pointercancel', onPointerUp)
+      el.removeEventListener('wheel', onWheel)
+    }
+  }, [])
+
+  return (
+    <div
+      className="complianceRowWrap"
+      style={{
+        position: 'absolute',
+        left: props.left,
+        top: props.top,
+        width: ARTBOARD_W - props.left,
+        height: 345,
+      }}
+    >
+      <div className="complianceRow" ref={scrollerRef}>
+        <div className="complianceRowGutter" aria-hidden="true" />
+        {cards.map((card, idx) => {
+          const isActive = idx === activeIdx
+          const isVisible = !!visible[card.key]
+          return (
+            <div
+              key={card.key}
+              className={[
+                'complianceCard',
+                isActive ? 'isActive' : 'isSide',
+                isVisible ? 'isVisible' : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+              data-card-key={card.key}
+              ref={(el) => {
+                cardRefs.current[idx] = el
+              }}
+              style={{ width: card.width, height: card.height }}
+            >
+              <div
+                className="complianceCardBadge"
+                style={{ width: card.badge.width, background: card.badge.bg, color: card.badge.fg }}
+              >
+                {card.badge.uppercase ? card.badge.label.toUpperCase() : card.badge.label}
+              </div>
+
+              <div className="complianceCardIcon" style={{ inset: card.iconInset }}>
+                <div className="complianceCardIconInner" style={{ inset: card.iconInnerInset ?? '0' }}>
+                  <img alt="" className="complianceCardIconImg" src={card.iconSrc} />
+                </div>
+                {card.extra}
+              </div>
+
+              <div className="complianceCardContent">
+                <div className="complianceCardTitle">{card.title}</div>
+                <div className="complianceCardDesc">{card.description}</div>
+              </div>
+            </div>
+          )
+        })}
+        <div className="complianceRowGutter" aria-hidden="true" />
+      </div>
+    </div>
+  )
+}
 
 export default function OrcestraLanding() {
   const [scale, setScale] = React.useState(1);
@@ -277,41 +561,43 @@ export default function OrcestraLanding() {
           <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLayer1} />
         </div>
       </div>
-      <div className="absolute contents left-[47px] top-[5477px]" data-node-id="13284:621">
-        <div className="absolute contents left-[47px] top-[6074px]" data-node-id="13274:2880">
-          <div className="absolute contents left-[47px] top-[6074px]" data-node-id="13271:2879">
-            <div className="absolute flex h-[819.251px] items-center justify-center left-[47px] top-[6074px] w-[1209.928px]" style={{ "--transform-inner-width": "0", "--transform-inner-height": "0" } as React.CSSProperties}>
-              <div className="flex-none rotate-30">
-                <div className="h-[209.056px] relative w-[1276.406px]" data-node-id="13271:2871">
-                  <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                    <img alt="" className="absolute h-full left-[0.1%] max-w-none top-0 w-[100.03%]" src={imgLine34} />
+      <div className="absolute contents left-0 top-[5477px]" data-node-id="13284:621">
+        <div className="absolute left-0 pointer-events-none top-[6074px] w-full" style={{ height: '819.251px' }} data-node-id="13274:2880">
+          <div className="absolute inset-0" data-node-id="13271:2879">
+            <div className="contents relative size-full">
+              <div className="absolute flex h-[819.251px] items-center justify-center left-[47px] top-0 w-[1209.928px]">
+                <div className="flex-none rotate-30">
+                  <div className="h-[209.056px] relative w-[1276.406px]" data-node-id="13271:2871" data-name="Line 34">
+                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                      <img alt="" className="absolute h-full left-[0.1%] max-w-none top-0 w-[100.03%]" src={imgLine34} />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="absolute flex h-[819.251px] items-center justify-center left-[calc(16.67%+143.68px)] top-[6074px] w-[1209.928px]" style={{ "--transform-inner-width": "0", "--transform-inner-height": "0" } as React.CSSProperties}>
-              <div className="-scale-y-100 flex-none rotate-150">
-                <div className="h-[209.056px] relative w-[1276.406px]" data-node-id="13271:2873">
-                  <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                    <img alt="" className="absolute h-full left-[0.1%] max-w-none top-0 w-[100.03%]" src={imgLine34} />
+              <div className="absolute flex h-[819.251px] items-center justify-center left-[calc(16.67%+143.68px)] top-0 w-[1209.928px]">
+                <div className="-scale-y-100 flex-none rotate-150">
+                  <div className="h-[209.056px] relative w-[1276.406px]" data-node-id="13271:2873" data-name="Line 35">
+                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                      <img alt="" className="absolute h-full left-[0.1%] max-w-none top-0 w-[100.03%]" src={imgLine34} />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="absolute flex h-[507.779px] items-center justify-center left-[calc(16.67%+68.61px)] top-[6601px] w-[749.925px]" style={{ "--transform-inner-width": "0", "--transform-inner-height": "0" } as React.CSSProperties}>
-              <div className="-rotate-30 -scale-y-100 flex-none">
-                <div className="h-[129.575px] relative w-[791.128px]" data-node-id="13271:2875">
-                  <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                    <img alt="" className="absolute h-full left-[0.1%] max-w-none top-0 w-[100.03%]" src={imgLine34} />
+              <div className="absolute flex h-[507.779px] items-center justify-center left-[calc(16.67%+68.61px)] top-[527px] w-[749.925px]">
+                <div className="-rotate-30 -scale-y-100 flex-none">
+                  <div className="h-[129.575px] relative w-[791.128px]" data-node-id="13271:2875" data-name="Line 36">
+                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                      <img alt="" className="absolute h-full left-[0.1%] max-w-none top-0 w-[100.03%]" src={imgLine34} />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="absolute flex h-[507.779px] items-center justify-center left-[calc(25%+162.08px)] top-[6601px] w-[749.925px]" style={{ "--transform-inner-width": "0", "--transform-inner-height": "0" } as React.CSSProperties}>
-              <div className="-rotate-150 flex-none">
-                <div className="h-[129.575px] relative w-[791.128px]" data-node-id="13271:2876">
-                  <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                    <img alt="" className="absolute h-full left-[0.1%] max-w-none top-0 w-[100.03%]" src={imgLine34} />
+              <div className="absolute flex h-[507.779px] items-center justify-center left-[calc(25%+162.08px)] top-[527px] w-[749.925px]">
+                <div className="-rotate-150 flex-none">
+                  <div className="h-[129.575px] relative w-[791.128px]" data-node-id="13271:2876" data-name="Line 37">
+                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                      <img alt="" className="absolute h-full left-[0.1%] max-w-none top-0 w-[100.03%]" src={imgLine34} />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -459,28 +745,6 @@ export default function OrcestraLanding() {
           const growBy = expandedH - collapsedH;
           const transition = { duration: 0.58, ease: 'easeInOut' as const };
 
-          const iconLine = (isActive: boolean) => (
-            <motion.div
-              className="relative size-[24px]"
-              initial={false}
-              animate={{ rotate: isActive ? 180 : 0 }}
-              transition={transition}
-            >
-              <motion.span
-                className="absolute left-1/2 top-1/2 h-[2px] w-[18px] -translate-x-1/2 -translate-y-1/2 bg-white/90"
-                initial={false}
-                animate={{ opacity: 1 }}
-                transition={transition}
-              />
-              <motion.span
-                className="absolute left-1/2 top-1/2 h-[18px] w-[2px] -translate-x-1/2 -translate-y-1/2 bg-white/90"
-                initial={false}
-                animate={{ opacity: isActive ? 0 : 1 }}
-                transition={transition}
-              />
-            </motion.div>
-          );
-
           const listItemVariants = {
             initial: { opacity: 0, y: 10 },
             animate: { opacity: 1, y: 0 },
@@ -546,17 +810,33 @@ export default function OrcestraLanding() {
                         </p>
                       </div>
 
-                      <motion.div
-                        className="absolute bg-[rgba(255,255,255,0.13)] overflow-hidden rounded-[71px] size-[48px] right-[25px] top-[24px] grid place-items-center"
-                        initial={false}
-                        animate={{
-                          scale: isActive ? 1.02 : 1,
-                          boxShadow: isActive ? '0px 0px 24px rgba(178,252,227,0.18)' : '0px 0px 12px rgba(178,252,227,0.08)',
-                        }}
-                        transition={transition}
-                      >
-                        {iconLine(isActive)}
-                      </motion.div>
+                      {isActive ? (
+                        <motion.div
+                          className="absolute bg-[rgba(255,255,255,0.13)] overflow-hidden rounded-[71px] size-[48px] right-[25px] top-[24px]"
+                          initial={false}
+                          animate={{
+                            scale: 1.02,
+                            boxShadow: '0px 0px 24px rgba(178,252,227,0.18)',
+                          }}
+                          transition={transition}
+                        >
+                          <div className="absolute left-[12px] top-[12px] size-[24px]">
+                            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFaqIconActive} />
+                          </div>
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          className="absolute right-[25px] top-[24px] size-[48px]"
+                          initial={false}
+                          animate={{
+                            scale: 1,
+                            boxShadow: '0px 0px 12px rgba(178,252,227,0.08)',
+                          }}
+                          transition={transition}
+                        >
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFaqIcon} />
+                        </motion.div>
+                      )}
 
                       <AnimatePresence mode="wait" initial={false}>
                         {isActive ? (
@@ -1118,104 +1398,7 @@ export default function OrcestraLanding() {
           <p className="absolute font-['Aeonik:Medium',sans-serif] h-[53px] leading-[60px] left-[calc(16.67%-139px)] not-italic text-[13px] text-[color:var(--color,#b2fce3)] top-[calc(50%+3535px)] tracking-[1.95px] uppercase w-[447px]" data-node-id="13246:1822">
             The Orcestra Compliance Framework
           </p>
-          <div className="absolute contents left-[141px] top-[10221px]" data-node-id="13246:1823">
-            <div className="absolute backdrop-blur-[40px] bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.09)] border-solid h-[345px] left-[141px] rounded-[16px] top-[10221px] w-[329px]" data-node-id="13246:1824" data-name="Product">
-              <p className="absolute font-['Aeonik:Medium',sans-serif] font-[var(--font-weight\/medium,normal)] leading-[38px] left-[30px] text-[20px] text-[color:var(--white,white)] top-[192px] w-[336px]" data-node-id="13246:1825">
-                PCI DSS Level 1
-              </p>
-              <p className="absolute font-['Aeonik:Regular',sans-serif] font-[var(--font-weight\/regular,normal)] leading-[25px] left-[30px] text-[#b7b7b7] text-[17px] top-[239px] tracking-[0.34px] w-[298px]" data-node-id="13246:1826">
-                Compliant architecture across all transaction handling and data storage systems.
-              </p>
-              <div className="absolute bg-[rgba(178,252,227,0.2)] h-[23px] left-[28px] rounded-[20px] top-[24px] w-[72px]" data-node-id="13246:1827" />
-              <p className="absolute font-['FK_Grotesk_Mono:Regular',sans-serif] h-[40px] leading-[38px] left-[37px] not-italic text-[#30ffb9] text-[12px] top-[17px] tracking-[1.2px] w-[56px]" data-node-id="13246:1828">
-                ACTIVE
-              </p>
-              <div className="absolute inset-[calc(29.86%-0.4px)_calc(68.79%+0.38px)_49.96%_calc(8.92%-0.82px)]" data-node-id="13246:1829" data-name="Icon">
-                <div className="absolute inset-[-1.44%_-1.36%]">
-                  <img alt="" className="block max-w-none size-full" src={imgIcon4} />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="absolute contents left-[calc(25%+79px)] top-[10221px]" data-node-id="13246:1830">
-            <div className="absolute backdrop-blur-[40px] bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.09)] border-solid h-[345px] left-[calc(25%+79px)] rounded-[16px] top-[10221px] w-[327px]" data-node-id="13246:1831" data-name="Product">
-              <p className="absolute font-['Aeonik:Medium',sans-serif] font-[var(--font-weight\/medium,normal)] leading-[38px] left-[30px] text-[20px] text-[color:var(--white,white)] top-[192px] w-[296px]" data-node-id="13246:1832">
-                Integrated AML + KYC/KYB
-              </p>
-              <p className="absolute font-['Aeonik:Regular',sans-serif] font-[var(--font-weight\/regular,normal)] leading-[25px] left-[30px] text-[#b7b7b7] text-[17px] top-[239px] tracking-[0.34px] w-[298px]" data-node-id="13246:1833">
-                Multi provider orchestration for sanctions, identity, and ownership verification.
-              </p>
-              <div className="absolute bg-[rgba(178,252,227,0.2)] h-[23px] left-[28px] rounded-[20px] top-[24px] w-[72px]" data-node-id="13246:1834" />
-              <p className="absolute font-['FK_Grotesk_Mono:Regular',sans-serif] h-[40px] leading-[38px] left-[37px] not-italic text-[#30ffb9] text-[12px] top-[17px] tracking-[1.2px] w-[56px]" data-node-id="13246:1835">
-                ACTIVE
-              </p>
-              <div className="absolute inset-[calc(30.72%-0.39px)_calc(66.97%+0.34px)_calc(51.01%+0.02px)_calc(8.87%-0.82px)]" data-node-id="13246:1836" data-name="Icon">
-                <div className="absolute inset-[-1.59%_-1.27%]">
-                  <img alt="" className="block max-w-none size-full" src={imgIcon5} />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="absolute contents left-[calc(50%+16px)] top-[10221px]" data-node-id="13246:1837">
-            <div className="absolute backdrop-blur-[40px] bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.09)] border-solid h-[345px] left-[calc(50%+16px)] rounded-[16px] top-[10221px] w-[329px]" data-node-id="13246:1838" data-name="Product">
-              <p className="absolute font-['Aeonik:Medium',sans-serif] font-[var(--font-weight\/medium,normal)] leading-[38px] left-[30px] text-[20px] text-[color:var(--white,white)] top-[192px] w-[298px]" data-node-id="13246:1839">{`Merchant & Agent Onboarding`}</p>
-              <p className="absolute font-['Aeonik:Regular',sans-serif] font-[var(--font-weight\/regular,normal)] leading-[25px] left-[30px] text-[#b7b7b7] text-[17px] top-[239px] tracking-[0.34px] w-[266px]" data-node-id="13246:1840">
-                Under automated audit trail for full lifecycle compliance documentation.
-              </p>
-              <div className="absolute bg-[rgba(178,252,227,0.2)] h-[23px] left-[28px] rounded-[20px] top-[24px] w-[72px]" data-node-id="13246:1841" />
-              <p className="absolute font-['FK_Grotesk_Mono:Regular',sans-serif] h-[40px] leading-[38px] left-[37px] not-italic text-[#30ffb9] text-[12px] top-[17px] tracking-[1.2px] w-[56px]" data-node-id="13246:1842">
-                ACTIVE
-              </p>
-              <div className="absolute inset-[calc(29.57%-0.41px)_calc(67.48%+0.35px)_49.86%_calc(9.42%-0.81px)]" data-node-id="13246:1843" data-name="Icon">
-                <div className="absolute inset-[-1.41%_-1.32%]">
-                  <img alt="" className="block max-w-none size-full" src={imgIcon6} />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="absolute contents left-[calc(75%-46px)] top-[10221px]" data-node-id="13246:1844">
-            <div className="absolute backdrop-blur-[40px] bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.09)] border-solid h-[345px] left-[calc(75%-46px)] rounded-[16px] top-[10221px] w-[327px]" data-node-id="13246:1845" data-name="Product">
-              <p className="absolute font-['Aeonik:Medium',sans-serif] font-[var(--font-weight\/medium,normal)] leading-[38px] left-[30px] text-[20px] text-[color:var(--white,white)] top-[192px] w-[336px]" data-node-id="13246:1846">
-                SOC 2 Type II
-              </p>
-              <p className="absolute font-['Aeonik:Regular',sans-serif] font-[var(--font-weight\/regular,normal)] leading-[25px] left-[30px] text-[#b7b7b7] text-[17px] top-[239px] tracking-[0.34px] w-[298px]" data-node-id="13246:1847">
-                Certification in progress for enterprise grade security and operational controls.
-              </p>
-              <div className="absolute bg-[rgba(37,137,170,0.2)] h-[23px] left-[28px] rounded-[20px] top-[24px] w-[118px]" data-node-id="13246:1848" />
-              <p className="absolute font-['FK_Grotesk_Mono:Regular',sans-serif] h-[40px] leading-[38px] left-[37px] not-italic text-[#46c7ff] text-[12px] top-[17px] tracking-[1.2px] uppercase w-[107px]" data-node-id="13246:1849">
-                In Progress
-              </p>
-              <div className="absolute contents left-[30px] top-[99px]" data-node-id="13246:1850">
-                <p className="absolute font-['Aeonik:Medium',sans-serif] font-[var(--font-weight\/medium,normal)] leading-[38px] left-[71px] text-[#b2fce3] text-[23px] top-[126px] w-[32px]" data-node-id="13246:1851">
-                  2
-                </p>
-                <div className="absolute inset-[28.99%_68.2%_49.86%_9.48%]" data-node-id="13246:1852" data-name="Icon">
-                  <div className="absolute inset-[-1.37%]">
-                    <img alt="" className="block max-w-none size-full" src={imgIcon7} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="absolute contents left-[calc(100%-112px)] top-[10221px]" data-node-id="13246:1853">
-            <div className="absolute backdrop-blur-[40px] bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.09)] border-solid h-[345px] left-[calc(100%-112px)] rounded-[16px] top-[10221px] w-[327px]" data-node-id="13246:1854" data-name="Product">
-              <p className="absolute font-['Aeonik:Medium',sans-serif] font-[var(--font-weight\/medium,normal)] leading-[38px] left-[30px] text-[20px] text-[color:var(--white,white)] top-[192px] w-[336px]" data-node-id="13246:1855">
-                ISO 27001
-              </p>
-              <p className="absolute font-['Aeonik:Regular',sans-serif] font-[var(--font-weight\/regular,normal)] leading-[25px] left-[30px] text-[#b7b7b7] text-[17px] top-[239px] tracking-[0.34px] w-[298px]" data-node-id="13246:1856">
-                Targeted for Q3 2026 to meet international information security management standards.
-              </p>
-              <div className="absolute bg-[rgba(182,185,184,0.2)] h-[23px] left-[28px] rounded-[20px] top-[24px] w-[82px]" data-node-id="13246:1857" />
-              <p className="absolute font-['FK_Grotesk_Mono:Regular',sans-serif] h-[40px] leading-[38px] left-[37px] not-italic text-[12px] text-white top-[17px] tracking-[1.2px] uppercase w-[73px]" data-node-id="13246:1858">
-                roadmap
-              </p>
-              <div className="absolute inset-[calc(29.86%-0.4px)_calc(68.81%+0.38px)_calc(51.88%+0.04px)_calc(9.48%-0.81px)]" data-node-id="13246:1859" data-name="Icon">
-                <div className="absolute inset-[-1.59%_-1.41%]">
-                  <img alt="" className="block max-w-none size-full" src={imgIcon8} />
-                </div>
-              </div>
-            </div>
-          </div>
+          <ComplianceCardsRow left={141} top={10221} />
         </div>
       </div>
       <div className="absolute contents left-px top-[7909px]" data-node-id="13284:617">
