@@ -1,0 +1,22 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 2443.65 1658.56" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Plan Graphics">
+<g id="Ellipse 29" filter="url(#filter0_f_15160_805)">
+<ellipse cx="1221.82" cy="829.278" rx="605.26" ry="212.714" fill="var(--fill-0, #006793)"/>
+</g>
+<g id="Ellipse 19" filter="url(#filter1_f_15160_805)">
+<ellipse cx="1377.59" cy="846.622" rx="261.012" ry="91.4569" fill="var(--fill-0, #B2FCE3)"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_f_15160_805" x="0" y="0" width="2443.65" height="1658.56" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="308.282" result="effect1_foregroundBlur_15160_805"/>
+</filter>
+<filter id="filter1_f_15160_805" x="705.539" y="344.123" width="1344.11" height="1005" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="205.521" result="effect1_foregroundBlur_15160_805"/>
+</filter>
+</defs>
+</svg>
