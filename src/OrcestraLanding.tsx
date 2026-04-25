@@ -2,15 +2,11 @@ import React from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import coreVideo from './assets/videos/orcestra-core.mp4'
 import { IntelligenceCoreVideo } from './components/IntelligenceCoreVideo'
-import { GlassFont1 } from './components/GlassFontVariants'
 
 const imgGradworld1 = new URL('./assets/figma/8ea1ae519a3a76f7436d84ae889edebdbfe82c01.png', import.meta.url).href;
 const imgLine34 = new URL('./assets/figma/6e1a0149b60c2eae697b257bcf574c9f3aa7bdbf.png', import.meta.url).href;
 const imgFaqIcon = new URL('./assets/figma/562000d92afdb1ea072ecd704f4a05e57f11f8d4.svg', import.meta.url).href;
 const imgFaqIconActive = new URL('./assets/figma/3f7be87b1ea1b30c3b59f9dfab5fc9e79be6c251.svg', import.meta.url).href;
-const imgPlatform02Icon = new URL('./assets/figma/platform-02-icon.svg', import.meta.url).href;
-const imgPlatform03Icon = new URL('./assets/figma/platform-03-icon.svg', import.meta.url).href;
-const imgPlatform04Icon = new URL('./assets/figma/platform-04-icon.svg', import.meta.url).href;
 const imgSunset1 = new URL('./assets/figma/09970d85eeff340e1424b29e8c3fcba540843cbd.png', import.meta.url).href;
 const imgSun1 = new URL('./assets/figma/6a2b0408ef32c3bfa23b90a220df1bb88d723032.png', import.meta.url).href;
 const img01MerchantIntelligence1 = new URL('./assets/figma/4364a79f5a3cd52d3cb329654472eb5a0913e33d.png', import.meta.url).href;
@@ -340,242 +336,6 @@ function ComplianceCardsRow(props: { left: number; top: number }) {
   )
 }
 
-type ProcessStepData = {
-  key: string
-  number: string
-  title: string
-  description: string
-}
-
-function ProcessHorizontalScroll(props: { left: number; top: number }) {
-  const scrollerRef = React.useRef<HTMLDivElement | null>(null)
-  const stepRefs = React.useRef<Array<HTMLDivElement | null>>([])
-  const [activeIdx, setActiveIdx] = React.useState(0)
-  const [visible, setVisible] = React.useState<Record<string, boolean>>({})
-
-  const steps = React.useMemo<ProcessStepData[]>(
-    () => [
-      {
-        key: '01',
-        number: '01',
-        title: 'Initial Screening',
-        description: 'Transaction submitted via API with pixel transparency. Downstream insights improved by data integrity.',
-      },
-      {
-        key: '02',
-        number: '02',
-        title: 'Compliance Layer',
-        description: 'Tokenization and encryption via custom checkout SDK. Fast, secure, and compliant entry layer.',
-      },
-      {
-        key: '03',
-        number: '03',
-        title: 'Risk Management',
-        description: 'AI fraud models integrated with mitigation tools. Regulatory and card brand compliance enforced agentically.',
-      },
-      {
-        key: '04',
-        number: '04',
-        title: 'Routing & Optimization',
-        description: 'Configurable multi acquirer logic with smart decline salvage. Real time authorization optimization.',
-      },
-      {
-        key: '05',
-        number: '05',
-        title: 'Settlement & Funding',
-        description: 'Full acquirer funding and expense reconciliation. Transparent, accurate settlement ensures trust.',
-      },
-    ],
-    [],
-  )
-
-  React.useEffect(() => {
-    const el = scrollerRef.current
-    if (!el) return
-
-    let raf = 0
-    const updateActive = () => {
-      raf = 0
-      const scroller = scrollerRef.current
-      if (!scroller) return
-      const center = scroller.scrollLeft + scroller.clientWidth / 2
-      let bestIdx = 0
-      let bestDist = Number.POSITIVE_INFINITY
-      for (let i = 0; i < steps.length; i++) {
-        const stepEl = stepRefs.current[i]
-        if (!stepEl) continue
-        const stepCenter = stepEl.offsetLeft + stepEl.clientWidth / 2
-        const d = Math.abs(stepCenter - center)
-        if (d < bestDist) {
-          bestDist = d
-          bestIdx = i
-        }
-      }
-      setActiveIdx(bestIdx)
-    }
-
-    const onScroll = () => {
-      if (raf) return
-      raf = window.requestAnimationFrame(updateActive)
-    }
-
-    el.addEventListener('scroll', onScroll, { passive: true })
-    updateActive()
-    return () => {
-      el.removeEventListener('scroll', onScroll)
-      if (raf) window.cancelAnimationFrame(raf)
-    }
-  }, [steps.length])
-
-  React.useEffect(() => {
-    const scroller = scrollerRef.current
-    if (!scroller) return
-
-    const stepEls = stepRefs.current.filter(Boolean) as HTMLDivElement[]
-    const io = new IntersectionObserver(
-      (entries) => {
-        setVisible((prev) => {
-          let changed = false
-          const next = { ...prev }
-          for (const e of entries) {
-            const key = (e.target as HTMLElement).dataset.stepKey
-            if (!key) continue
-            const v = e.isIntersecting
-            if (next[key] !== v) {
-              next[key] = v
-              changed = true
-            }
-          }
-          return changed ? next : prev
-        })
-      },
-      { root: scroller, threshold: 0.35 },
-    )
-
-    for (const s of stepEls) io.observe(s)
-    return () => io.disconnect()
-  }, [])
-
-  React.useEffect(() => {
-    const el = scrollerRef.current
-    if (!el) return
-
-    let isPointerDown = false
-    let startX = 0
-    let startScrollLeft = 0
-
-    const onPointerDown = (e: PointerEvent) => {
-      if (e.pointerType === 'mouse' && e.button !== 0) return
-      isPointerDown = true
-      startX = e.clientX
-      startScrollLeft = el.scrollLeft
-      el.setPointerCapture(e.pointerId)
-      el.classList.add('isDragging')
-    }
-
-    const onPointerMove = (e: PointerEvent) => {
-      if (!isPointerDown) return
-      const dx = e.clientX - startX
-      el.scrollLeft = startScrollLeft - dx
-    }
-
-    const onPointerUp = (e: PointerEvent) => {
-      if (!isPointerDown) return
-      isPointerDown = false
-      try {
-        el.releasePointerCapture(e.pointerId)
-      } catch {
-        // ignore
-      }
-      el.classList.remove('isDragging')
-    }
-
-    const onWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return
-      const maxScroll = el.scrollWidth - el.clientWidth
-      if (maxScroll <= 0) return
-      const atStart = el.scrollLeft <= 0
-      const atEnd = el.scrollLeft >= maxScroll - 1
-      const goingLeft = e.deltaY < 0
-      const goingRight = e.deltaY > 0
-      if ((atStart && goingLeft) || (atEnd && goingRight)) return
-      e.preventDefault()
-      el.scrollLeft += e.deltaY
-    }
-
-    el.addEventListener('pointerdown', onPointerDown)
-    el.addEventListener('pointermove', onPointerMove)
-    el.addEventListener('pointerup', onPointerUp)
-    el.addEventListener('pointercancel', onPointerUp)
-    el.addEventListener('wheel', onWheel, { passive: false })
-
-    return () => {
-      el.removeEventListener('pointerdown', onPointerDown)
-      el.removeEventListener('pointermove', onPointerMove)
-      el.removeEventListener('pointerup', onPointerUp)
-      el.removeEventListener('pointercancel', onPointerUp)
-      el.removeEventListener('wheel', onWheel)
-    }
-  }, [])
-
-  return (
-    <div
-      className="processRowWrap"
-      style={{
-        position: 'absolute',
-        left: props.left,
-        top: props.top,
-        width: ARTBOARD_W - props.left,
-        height: 260,
-      }}
-    >
-      <div className="processRow" ref={scrollerRef}>
-        <div className="processRowGutter" aria-hidden="true" />
-        {steps.map((s, idx) => {
-          const isActive = idx === activeIdx
-          const isVisible = !!visible[s.key]
-          const showArrow = idx !== steps.length - 1
-
-          return (
-            <div key={s.key} className="processStepWrap">
-              <div
-                className={[
-                  'processStep',
-                  isActive ? 'isActive' : 'isSide',
-                  isVisible ? 'isVisible' : '',
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
-                data-step-key={s.key}
-                ref={(el) => {
-                  stepRefs.current[idx] = el
-                }}
-              >
-                <div className="processDigit" aria-hidden="true" data-number={s.number}>
-                  <span className="processDigitBlur">{s.number}</span>
-                  <span className="processDigitStroke">{s.number}</span>
-                  <span className="processDigitHighlight">{s.number}</span>
-                </div>
-
-                <div className="processInfo">
-                  <p className="processTitle">{s.title}</p>
-                  <p className="processDesc">{s.description}</p>
-                </div>
-              </div>
-              {showArrow ? (
-                <div className="processArrow" aria-hidden="true">
-                  <img alt="" className="processArrowImg" src={imgPolygon1} />
-                </div>
-              ) : null}
-            </div>
-          )
-        })}
-        <div className="processRowGutter" aria-hidden="true" />
-      </div>
-    </div>
-  )
-}
-
 export default function OrcestraLanding() {
   const [scale, setScale] = React.useState(1);
   const [platformActive, setPlatformActive] = React.useState<'01' | '02' | '03' | '04'>('01');
@@ -878,8 +638,6 @@ export default function OrcestraLanding() {
                 'Institutional grade underwriting without institutional headcount',
               ],
               iconSrc: imgIcon,
-              closedIconSrc: imgFaqIcon,
-              closedIconClassName: '',
               // expanded heights are the Figma card height, used for premium morph behavior
               expandedH: 553,
               capDividerH: 288,
@@ -909,9 +667,7 @@ export default function OrcestraLanding() {
                 'Fewer false positives',
                 'Portfolio level fraud containment',
               ],
-              iconSrc: imgPlatform02Icon,
-              closedIconSrc: imgPlatform02Icon,
-              closedIconClassName: 'rounded-full bg-[rgba(255,255,255,0.06)] overflow-hidden',
+              iconSrc: imgIcon,
               expandedH: 553,
               capDividerH: 255,
               outDividerH: 223,
@@ -941,9 +697,7 @@ export default function OrcestraLanding() {
                 'Reduced dependency on single acquirer',
                 'Real time visibility into processor performance',
               ],
-              iconSrc: imgPlatform03Icon,
-              closedIconSrc: imgPlatform03Icon,
-              closedIconClassName: 'rounded-full bg-[rgba(255,255,255,0.02)] overflow-hidden',
+              iconSrc: imgIcon,
               expandedH: 553,
               capDividerH: 287,
               outDividerH: 223,
@@ -972,9 +726,7 @@ export default function OrcestraLanding() {
                 'Early intervention before thresholds are breached',
                 'Full visibility across all MIDs & processors',
               ],
-              iconSrc: imgPlatform04Icon,
-              closedIconSrc: imgPlatform04Icon,
-              closedIconClassName: 'rounded-[14px] bg-[rgba(255,255,255,0.02)] overflow-hidden',
+              iconSrc: imgIcon,
               expandedH: 553,
               capDividerH: 255,
               outDividerH: 191,
@@ -1058,41 +810,33 @@ export default function OrcestraLanding() {
                         </p>
                       </div>
 
-                      <AnimatePresence mode="wait" initial={false}>
-                        {isActive ? (
-                          <motion.div
-                            key={`${r.id}-icon-open`}
-                            className="absolute bg-[rgba(255,255,255,0.13)] overflow-hidden rounded-[71px] size-[48px] right-[25px] top-[24px]"
-                            initial={{ opacity: 0, scale: 0.96 }}
-                            animate={{
-                              opacity: 1,
-                              scale: 1.02,
-                              boxShadow: '0px 0px 24px rgba(178,252,227,0.18)',
-                            }}
-                            exit={{ opacity: 0, scale: 0.96 }}
-                            transition={transition}
-                          >
-                            <div className="absolute left-[12px] top-[12px] size-[24px]">
-                              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFaqIconActive} />
-                            </div>
-                          </motion.div>
-                        ) : (
-                          <motion.div
-                            key={`${r.id}-icon-closed`}
-                            className={`absolute right-[25px] top-[24px] size-[48px] ${r.closedIconClassName ?? ''}`}
-                            initial={{ opacity: 0, scale: 0.96 }}
-                            animate={{
-                              opacity: 1,
-                              scale: 1,
-                              boxShadow: '0px 0px 12px rgba(178,252,227,0.08)',
-                            }}
-                            exit={{ opacity: 0, scale: 0.96 }}
-                            transition={transition}
-                          >
-                            <img alt="" className="absolute block inset-0 max-w-none size-full" src={r.closedIconSrc} />
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                      {isActive ? (
+                        <motion.div
+                          className="absolute bg-[rgba(255,255,255,0.13)] overflow-hidden rounded-[71px] size-[48px] right-[25px] top-[24px]"
+                          initial={false}
+                          animate={{
+                            scale: 1.02,
+                            boxShadow: '0px 0px 24px rgba(178,252,227,0.18)',
+                          }}
+                          transition={transition}
+                        >
+                          <div className="absolute left-[12px] top-[12px] size-[24px]">
+                            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFaqIconActive} />
+                          </div>
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          className="absolute right-[25px] top-[24px] size-[48px]"
+                          initial={false}
+                          animate={{
+                            scale: 1,
+                            boxShadow: '0px 0px 12px rgba(178,252,227,0.08)',
+                          }}
+                          transition={transition}
+                        >
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFaqIcon} />
+                        </motion.div>
+                      )}
 
                       <AnimatePresence mode="wait" initial={false}>
                         {isActive ? (
@@ -1368,44 +1112,30 @@ export default function OrcestraLanding() {
           <div className="absolute inset-[55.78%_37.15%_40.82%_36.55%]" data-node-id="13263:2080">
             <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup1426} />
           </div>
-          <div
-            className="absolute flex h-[496px] items-center justify-center left-[calc(33.33%+34px)] top-[7177px] w-[583px]"
-            style={{ "--transform-inner-width": "0", "--transform-inner-height": "0" } as React.CSSProperties}
-          >
-            <div
-              className="relative h-[496px] w-[583px] rotate-90"
-              data-node-id="13268:2811"
-              data-name="Sun 1"
-              style={{ aspectRatio: '67 / 57' }}
-            >
-              <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgSun1} />
+          <div className="absolute flex h-[583px] items-center justify-center left-[calc(33.33%+34px)] top-[7177px] w-[496px]" style={{ "--transform-inner-width": "0", "--transform-inner-height": "0" } as React.CSSProperties}>
+            <div className="flex-none rotate-90">
+              <div className="h-[496px] relative w-[583px]" data-node-id="13268:2811" data-name="Sun 1">
+                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgSun1} />
+              </div>
             </div>
           </div>
-          <div
-            className="absolute flex h-[583px] items-center justify-center left-[calc(33.33%+34px)] top-[7177px] w-[496px] pointer-events-none"
-            data-node-id="13263:2757"
-            data-name="Mask group"
-          >
-            <div className="relative" data-node-id="13263:2759" data-name="glass-glowing-magic-ball-energy-inside 1">
+          <div className="absolute contents inset-[56.49%_42.62%_41.53%_42.02%]" data-node-id="13263:2757" data-name="Mask group">
+            <div
+              className="absolute left-1/2 top-[7309.05px] -translate-x-1/2"
+              data-node-id="13263:2759"
+              data-name="glass-glowing-magic-ball-energy-inside 1"
+            >
               <IntelligenceCoreVideo
                 src={coreVideo}
-                size="clamp(220px, 18vw, 300px)"
+                size={258}
                 glow
                 maskSrc={imgGlassGlowingMagicBallEnergyInside1}
                 posterSrc={imgGlassGlowingMagicBallEnergyInside1}
-                mediaWidth={564.411}
-                mediaHeight={317.481}
-                mediaAspectRatio="16/9"
               />
-              <div className="absolute inset-0 flex items-center justify-center" data-node-id="13268:2813" data-name="Layer_1">
-                <img
-                  alt=""
-                  src={imgLayer2}
-                  className="block object-contain"
-                  style={{ width: '155.416px', height: '27.151px' }}
-                />
-              </div>
             </div>
+          </div>
+          <div className="-translate-x-1/2 absolute h-[27.151px] left-[calc(50%-5.02px)] top-[7454.85px] w-[155.416px]" data-node-id="13268:2813" data-name="Layer_1">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLayer2} />
           </div>
           <div className="absolute contents left-[calc(58.33%+76px)] top-[7386px]" data-node-id="13268:2848">
             <p className="absolute font-['Aeonik:Medium',sans-serif] h-[53px] leading-[60px] left-[calc(79.17%-169px)] not-italic text-[15px] text-white top-[calc(50%+890px)] tracking-[5.7px] uppercase w-[161px]" data-node-id="13268:2766">
@@ -1681,12 +1411,96 @@ export default function OrcestraLanding() {
           The Orcestra Difference
         </p>
         <div className="absolute contents left-[calc(8.33%+202px)] not-italic text-center top-[7968px]" data-node-id="13246:1891">
-          <GlassFont1 borderRadius={16} width={997} height={80}>Optimized transactioning coordinated agentically</GlassFont1>
+          <p className="-translate-x-1/2 absolute bg-clip-text font-['Aeonik:Medium',sans-serif] leading-none left-[calc(8.33%+700.5px)] text-[75px] text-[transparent] top-[7968px] tracking-[-0.75px] w-[997px]" data-node-id="13246:1892" style={{ backgroundImage: "linear-gradient(255.36453830192602deg, var(--color,rgb(178, 252, 227)) 7.1417%, rgb(57, 165, 210) 97.489%)" }}>
+            Optimized transactioning coordinated agentically
+          </p>
           <p className="-translate-x-1/2 absolute font-['Aeonik:Regular',sans-serif] leading-[1.6] left-[calc(16.67%+560.5px)] text-[#9997a0] text-[18px] top-[8151px] tracking-[0.36px] w-[747px]" data-node-id="13246:1893">
             Orcestra replaces fragmented tasks with a unified intelligence layer that continuously evaluates merchants, transactions, and processor performance, making real time decisions that improve approvals, reduce risk, and increase revenue.
           </p>
         </div>
-        <ProcessHorizontalScroll left={102} top={8422} />
+        <div className="absolute contents left-[102px] top-[8422px]" data-node-id="13277:3007">
+          <p className="absolute font-['Aeonik:Regular',sans-serif] font-[var(--font-weight\/regular,normal)] leading-[25px] left-[calc(16.67%+150px)] text-[#b7b7b7] text-[18px] top-[8596px] tracking-[0.36px] w-[298px]" data-node-id="13246:1883">
+            Transaction submitted via API with pixel transparency. Downstream insights improved by data integrity.
+          </p>
+          <p className="-translate-x-1/2 absolute font-['Aeonik:Regular',sans-serif] h-[198px] leading-[38px] left-[calc(12.5%+60px)] not-italic text-[300px] text-[rgba(255,255,255,0.2)] text-center top-[8485px] w-[336px]" data-node-id="13246:1885">
+            01
+          </p>
+          <p className="-translate-x-1/2 absolute font-['Aeonik:Regular',sans-serif] h-[198px] leading-[38px] left-[calc(70.83%-83px)] not-italic text-[300px] text-[rgba(255,255,255,0.2)] text-center top-[8485px] w-[392px]" data-node-id="13246:1886">
+            02
+          </p>
+          <div className="absolute flex h-[171px] items-center justify-center left-[calc(41.67%+67px)] top-[8422px] w-[89px]" style={{ "--transform-inner-width": "0", "--transform-inner-height": "0" } as React.CSSProperties}>
+            <div className="flex-none rotate-90">
+              <div className="h-[89px] relative w-[171px]" data-node-id="13246:1888">
+                <div className="absolute bottom-1/4 left-[6.7%] right-[6.7%] top-0">
+                  <img alt="" className="block max-w-none size-full" src={imgPolygon1} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <p className="absolute font-['Aeonik:Medium',sans-serif] font-[var(--font-weight\/medium,normal)] leading-[38px] left-[calc(83.33%-81px)] text-[35px] text-[color:var(--white,white)] top-[8538px] w-[336px]" data-node-id="13246:1889">
+            Compliance Layer
+          </p>
+          <p className="absolute font-['Aeonik:Regular',sans-serif] font-[var(--font-weight\/regular,normal)] h-[100px] leading-[25px] left-[calc(83.33%-81px)] text-[#b7b7b7] text-[18px] top-[8595px] tracking-[0.36px] w-[298px]" data-node-id="13246:1890">
+            Tokenization and encryption via custom checkout SDK. Fast, secure, and compliant entry layer.
+          </p>
+          <p className="absolute font-['Aeonik:Medium',sans-serif] font-[var(--font-weight\/medium,normal)] leading-[38px] left-[calc(16.67%+150px)] text-[35px] text-[color:var(--white,white)] top-[8538px] w-[336px]" data-node-id="13246:1887">
+            Initial Screening
+          </p>
+          <div className="absolute flex h-[171px] items-center justify-center left-[calc(100%+852px)] top-[8422px] w-[89px]" style={{ "--transform-inner-width": "0", "--transform-inner-height": "0" } as React.CSSProperties}>
+            <div className="flex-none rotate-90">
+              <div className="h-[89px] relative w-[171px]" data-node-id="13277:2999">
+                <div className="absolute bottom-1/4 left-[6.7%] right-[6.7%] top-0">
+                  <img alt="" className="block max-w-none size-full" src={imgPolygon1} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="absolute flex h-[171px] items-center justify-center left-[calc(100%+1740px)] top-[8422px] w-[89px]" style={{ "--transform-inner-width": "0", "--transform-inner-height": "0" } as React.CSSProperties}>
+            <div className="flex-none rotate-90">
+              <div className="h-[89px] relative w-[171px]" data-node-id="13277:3003">
+                <div className="absolute bottom-1/4 left-[6.7%] right-[6.7%] top-0">
+                  <img alt="" className="block max-w-none size-full" src={imgPolygon1} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <p className="-translate-x-1/2 absolute font-['Aeonik:Regular',sans-serif] h-[198px] leading-[38px] left-[calc(100%+304px)] not-italic text-[300px] text-[rgba(255,255,255,0.2)] text-center top-[8485px] w-[392px]" data-node-id="13277:2995">
+            03
+          </p>
+          <p className="absolute font-['Aeonik:Medium',sans-serif] font-[var(--font-weight\/medium,normal)] leading-[38px] left-[calc(100%+516px)] text-[35px] text-[color:var(--white,white)] top-[8538px] w-[336px]" data-node-id="13277:2997">
+            Risk Management
+          </p>
+          <p className="-translate-x-1/2 absolute font-['Aeonik:Regular',sans-serif] h-[198px] leading-[38px] left-[calc(100%+1192px)] not-italic text-[300px] text-[rgba(255,255,255,0.2)] text-center top-[8485px] w-[392px]" data-node-id="13277:3000">
+            04
+          </p>
+          <p className="absolute font-['Aeonik:Medium',sans-serif] font-[var(--font-weight\/medium,normal)] leading-[38px] left-[calc(100%+1404px)] text-[35px] text-[color:var(--white,white)] top-[8538px] w-[336px]" data-node-id="13277:3001">{`Routing & Optimization`}</p>
+          <p className="absolute font-['Aeonik:Regular',sans-serif] font-[var(--font-weight\/regular,normal)] h-[100px] leading-[25px] left-[calc(100%+1404px)] text-[#b7b7b7] text-[18px] top-[8633px] tracking-[0.36px] w-[298px]" data-node-id="13277:3002">
+            Configurable multi acquirer logic with smart decline salvage. Real time authorization optimization.
+          </p>
+          <p className="absolute font-['Aeonik:Regular',sans-serif] font-[var(--font-weight\/regular,normal)] h-[100px] leading-[25px] left-[calc(100%+516px)] text-[#b7b7b7] text-[18px] top-[8595px] tracking-[0.36px] w-[298px]" data-node-id="13277:2998">
+            AI fraud models integrated with mitigation tools. Regulatory and card brand compliance enforced agentically.
+          </p>
+          <p className="-translate-x-1/2 absolute font-['Aeonik:Regular',sans-serif] h-[198px] leading-[38px] left-[calc(100%+2080px)] not-italic text-[300px] text-[rgba(255,255,255,0.2)] text-center top-[8485px] w-[392px]" data-node-id="13277:3004">
+            05
+          </p>
+          <p className="absolute font-['Aeonik:Medium',sans-serif] font-[var(--font-weight\/medium,normal)] leading-[38px] left-[calc(100%+2292px)] text-[35px] text-[color:var(--white,white)] top-[8538px] w-[336px] whitespace-pre-wrap" data-node-id="13277:3005">
+            {`Settlement `}
+            <br aria-hidden="true" />
+            {`& Funding`}
+          </p>
+          <p className="absolute font-['Aeonik:Regular',sans-serif] font-[var(--font-weight\/regular,normal)] h-[100px] leading-[25px] left-[calc(100%+2292px)] text-[#b7b7b7] text-[18px] top-[8633px] tracking-[0.36px] w-[298px]" data-node-id="13277:3006">
+            Full acquirer funding and expense reconciliation. Transparent, accurate settlement ensures trust.
+          </p>
+          <div className="absolute flex h-[171px] items-center justify-center left-[calc(100%-36px)] top-[8422px] w-[89px]" style={{ "--transform-inner-width": "0", "--transform-inner-height": "0" } as React.CSSProperties}>
+            <div className="flex-none rotate-90">
+              <div className="h-[89px] relative w-[171px]" data-node-id="13246:1894">
+                <div className="absolute bottom-1/4 left-[6.7%] right-[6.7%] top-0">
+                  <img alt="" className="block max-w-none size-full" src={imgPolygon1} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div className="absolute contents left-[calc(8.33%+120px)] top-[8882px]" data-node-id="13246:1895">
         <div className="absolute flex h-[366px] items-center justify-center left-[calc(75%-30px)] top-[9348px] w-[311px]" style={{ "--transform-inner-width": "0", "--transform-inner-height": "0" } as React.CSSProperties}>

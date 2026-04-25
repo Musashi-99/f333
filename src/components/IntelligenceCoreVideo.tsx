@@ -6,9 +6,6 @@ export type IntelligenceCoreVideoProps = {
   glow?: boolean
   posterSrc?: string
   maskSrc?: string
-  mediaWidth?: number
-  mediaHeight?: number
-  mediaAspectRatio?: string
   className?: string
 }
 
@@ -18,9 +15,6 @@ export function IntelligenceCoreVideo({
   glow = true,
   posterSrc,
   maskSrc,
-  mediaWidth,
-  mediaHeight,
-  mediaAspectRatio,
   className,
 }: IntelligenceCoreVideoProps) {
   const [failed, setFailed] = React.useState(false)
@@ -63,42 +57,29 @@ export function IntelligenceCoreVideo({
         className="absolute inset-0 overflow-hidden rounded-full bg-black/30"
         style={maskStyle}
       >
-        <div
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-          style={
-            mediaWidth && mediaHeight
-              ? {
-                  width: `${mediaWidth}px`,
-                  height: `${mediaHeight}px`,
-                  aspectRatio: mediaAspectRatio,
-                }
-              : { width: '100%', height: '100%', aspectRatio: mediaAspectRatio }
-          }
-        >
-          {!failed ? (
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-              poster={posterSrc}
-              onError={() => setFailed(true)}
-              onStalled={() => setFailed(true)}
-              className="absolute inset-0 size-full object-cover [transform:translateZ(0)]"
-            >
-              <source src={src} type="video/mp4" />
-            </video>
-          ) : null}
+        {!failed ? (
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster={posterSrc}
+            onError={() => setFailed(true)}
+            onStalled={() => setFailed(true)}
+            className="absolute inset-0 size-full object-cover [transform:translateZ(0)]"
+          >
+            <source src={src} type="video/mp4" />
+          </video>
+        ) : null}
 
-          {failed && posterSrc ? (
-            <img
-              alt=""
-              src={posterSrc}
-              className="absolute inset-0 size-full object-cover pointer-events-none"
-            />
-          ) : null}
-        </div>
+        {failed && posterSrc ? (
+          <img
+            alt=""
+            src={posterSrc}
+            className="absolute inset-0 size-full object-cover pointer-events-none"
+          />
+        ) : null}
       </div>
     </div>
   )
