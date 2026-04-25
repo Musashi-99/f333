@@ -72,6 +72,12 @@ body {
   height: 260px;
   scroll-snap-align: center;
 
+  background: transparent;
+  border: 0;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+
   opacity: 0;
   transform: translateY(10px) scale(0.95);
   transition:
@@ -87,9 +93,9 @@ body {
 }
 
 .processStep.isSide {
-  opacity: 0.45;
+  opacity: 1;
   transform: translateY(0) scale(0.94);
-  filter: saturate(0.95);
+  filter: none;
 }
 
 .processStep.isActive {
@@ -123,40 +129,65 @@ body {
   text-align: center;
 }
 
+.processDigit::before {
+  content: '';
+  position: absolute;
+  inset: -18px -22px;
+  pointer-events: none;
+  background:
+    radial-gradient(55% 80% at 45% 42%, rgba(178, 252, 227, 0.20) 0%, rgba(23, 196, 255, 0.12) 32%, rgba(0, 0, 0, 0) 68%),
+    radial-gradient(40% 70% at 58% 55%, rgba(255, 255, 255, 0.10) 0%, rgba(0, 0, 0, 0) 62%);
+  filter: blur(16px);
+  opacity: 0.9;
+  mix-blend-mode: screen;
+}
+
 .processDigitStroke {
-  color: rgba(255, 255, 255, 0.06);
-  -webkit-text-stroke: 1.25px rgba(255, 255, 255, 0.38);
+  color: transparent;
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.10) 42%, rgba(255, 255, 255, 0.18) 100%),
+    radial-gradient(65% 95% at 40% 35%, rgba(178, 252, 227, 0.18) 0%, rgba(0, 0, 0, 0) 60%),
+    radial-gradient(70% 95% at 62% 58%, rgba(23, 196, 255, 0.14) 0%, rgba(0, 0, 0, 0) 62%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 0px transparent;
   text-shadow:
-    0 0 30px rgba(178, 252, 227, 0.06),
-    0 0 70px rgba(23, 196, 255, 0.05);
-  opacity: 0.45;
+    0 0 26px rgba(178, 252, 227, 0.14),
+    0 0 64px rgba(23, 196, 255, 0.12);
+  opacity: 0.72;
+  mix-blend-mode: screen;
 }
 
 .processDigitBlur {
-  color: rgba(255, 255, 255, 0.08);
-  -webkit-text-stroke: 1.25px rgba(255, 255, 255, 0.18);
-  filter: blur(6px);
-  opacity: 0.35;
+  color: rgba(255, 255, 255, 0.18);
+  -webkit-text-stroke: 0px transparent;
+  filter: blur(10px);
+  opacity: 0.5;
+  mix-blend-mode: screen;
 }
 
 .processDigitHighlight {
   color: transparent;
-  -webkit-text-stroke: 0.7px rgba(255, 255, 255, 0.55);
-  opacity: 0.12;
+  background-image:
+    linear-gradient(112deg, rgba(178, 252, 227, 0.36) 0%, rgba(23, 196, 255, 0.30) 45%, rgba(255, 255, 255, 0.22) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 0px transparent;
+  opacity: 0.6;
   transform: translateY(-1px);
+  mix-blend-mode: screen;
 }
 
 .processStep.isActive .processDigitStroke {
-  opacity: 0.62;
+  opacity: 0.72;
   text-shadow:
-    0 0 24px rgba(178, 252, 227, 0.12),
-    0 0 70px rgba(48, 255, 185, 0.12),
-    0 0 120px rgba(23, 196, 255, 0.08);
+    0 0 26px rgba(178, 252, 227, 0.14),
+    0 0 64px rgba(23, 196, 255, 0.12);
 }
 
 .processStep.isActive .processDigitBlur {
-  opacity: 0.48;
-  filter: blur(7px);
+  opacity: 0.5;
+  filter: blur(10px);
 }
 
 .processInfo {
@@ -164,6 +195,17 @@ body {
   left: 150px;
   top: 53px;
   width: 336px;
+  display: none;
+}
+
+.processDigit {
+  z-index: 1;
+  -webkit-mask-image: linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 52%, rgba(0, 0, 0, 0) 72%);
+  mask-image: linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 52%, rgba(0, 0, 0, 0) 72%);
+}
+
+.processStep.isSide .processDigit {
+  filter: brightness(2.1) saturate(1.05);
 }
 
 .processTitle {
@@ -189,6 +231,7 @@ body {
 }
 
 .processArrow {
+  display: none;
   width: 89px;
   height: 171px;
   display: flex;

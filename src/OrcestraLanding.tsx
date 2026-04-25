@@ -1687,7 +1687,7 @@ export default function OrcestraLanding() {
             Orcestra replaces fragmented tasks with a unified intelligence layer that continuously evaluates merchants, transactions, and processor performance, making real time decisions that improve approvals, reduce risk, and increase revenue.
           </p>
         </div>
-        <ProcessHorizontalScroll left={102} top={8422} />
+        {null}
       </div>
       <div className="absolute contents left-[calc(8.33%+120px)] top-[8882px]" data-node-id="13246:1895">
         <div className="absolute flex h-[366px] items-center justify-center left-[calc(75%-30px)] top-[9348px] w-[311px]" style={{ "--transform-inner-width": "0", "--transform-inner-height": "0" } as React.CSSProperties}>
