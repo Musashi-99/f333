@@ -48,9 +48,44 @@ const imgGroup1437 = new URL('./assets/figma/d978ab67a31b0ebc39b6868296d2fe79969
 const imgLine42 = new URL('./assets/figma/30fd22d106fdce0fa9ae03bbe951eb1ee21fc1f7.svg', import.meta.url).href;
 const imgLine43 = new URL('./assets/figma/b24104c17712ace1be8fd07d072beb87ed4d8817.svg', import.meta.url).href;
 
+const ARTBOARD_W = 1681;
+const ARTBOARD_H = 12992;
+
 export default function OrcestraLanding() {
+  const [scale, setScale] = React.useState(1);
+
+  React.useEffect(() => {
+    const update = () => {
+      const vw = window.innerWidth || ARTBOARD_W;
+      // keep a little gutter so we never trigger horizontal scrollbars
+      const gutter = vw < 640 ? 16 : 24;
+      const next = Math.min(1, Math.max(0.1, (vw - gutter) / ARTBOARD_W));
+      setScale(next);
+    };
+
+    update();
+    window.addEventListener('resize', update, { passive: true });
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
   return (
-    <div className="bg-black relative size-full" data-node-id="13246:1546" data-name="Orcestra/26 Landing">
+    <div className="bg-black min-h-screen w-full overflow-x-hidden">
+      <div
+        className="mx-auto overflow-hidden"
+        style={{
+          width: ARTBOARD_W * scale,
+          height: ARTBOARD_H * scale,
+        }}
+      >
+        <div
+          style={{
+            width: ARTBOARD_W,
+            height: ARTBOARD_H,
+            transform: `scale(${scale})`,
+            transformOrigin: 'top left',
+          }}
+        >
+          <div className="bg-black relative size-full" data-node-id="13246:1546" data-name="Orcestra/26 Landing">
       <div className="absolute flex h-[727px] items-center justify-center left-0 top-[-3px] w-[1681px]">
         <div className="flex-none rotate-180">
           <div className="h-[727px] overflow-clip relative w-[1681px]" data-node-id="13246:1548" data-name="Footer">
@@ -1268,6 +1303,9 @@ export default function OrcestraLanding() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
         </div>
       </div>
     </div>
