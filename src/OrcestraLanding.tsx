@@ -2,7 +2,6 @@ import React from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import coreVideo from './assets/videos/orcestra-core.mp4'
 import { IntelligenceCoreVideo } from './components/IntelligenceCoreVideo'
-import { GlassFont1 } from './components/GlassFontVariants'
 
 const imgGradworld1 = new URL('./assets/figma/8ea1ae519a3a76f7436d84ae889edebdbfe82c01.png', import.meta.url).href;
 const imgLine34 = new URL('./assets/figma/6e1a0149b60c2eae697b257bcf574c9f3aa7bdbf.png', import.meta.url).href;
@@ -1681,7 +1680,9 @@ export default function OrcestraLanding() {
           The Orcestra Difference
         </p>
         <div className="absolute contents left-[calc(8.33%+202px)] not-italic text-center top-[7968px]" data-node-id="13246:1891">
-          <GlassFont1 borderRadius={16} width={997} height={80}>Optimized transactioning coordinated agentically</GlassFont1>
+          <p className="-translate-x-1/2 absolute bg-clip-text font-['Aeonik:Medium',sans-serif] leading-none left-[calc(8.33%+700.5px)] text-[75px] text-[transparent] top-[7968px] tracking-[-0.75px] w-[997px]" data-node-id="13246:1892" style={{ backgroundImage: "linear-gradient(255.36453830192602deg, var(--color,rgb(178, 252, 227)) 7.1417%, rgb(57, 165, 210) 97.489%)" }}>
+            Optimized transactioning coordinated agentically
+          </p>
           <p className="-translate-x-1/2 absolute font-['Aeonik:Regular',sans-serif] leading-[1.6] left-[calc(16.67%+560.5px)] text-[#9997a0] text-[18px] top-[8151px] tracking-[0.36px] w-[747px]" data-node-id="13246:1893">
             Orcestra replaces fragmented tasks with a unified intelligence layer that continuously evaluates merchants, transactions, and processor performance, making real time decisions that improve approvals, reduce risk, and increase revenue.
           </p>
